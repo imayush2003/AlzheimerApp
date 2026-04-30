@@ -1,0 +1,28 @@
+MobileNetV2 Fine-tuning Results
+===================================
+
+This summary provides classification metrics and confusion matrix
+from the fine-tuned MobileNetV2 model used for Alzheimer’s stage detection.
+Grad-CAM visualizations are stored for interpretability and analysis.
+
+📁 Model path: C:\Users\Ayush\Alzheimer_Project\models\mobilenet_finetuned.h5
+
+📊 Classification Report (first lines):
+                    precision    recall  f1-score       support
+Mild Dementia        0.543964  0.291883  0.379912   5002.000000
+Moderate Dementia    0.963303  0.215164  0.351759    488.000000
+Non Demented         0.865600  0.957321  0.909153  67222.000000
+Very mild Dementia   0.617378  0.418288  0.498697  13725.000000
+accuracy             0.829032  0.829032  0.829032      0.829032
+
+🧮 Confusion Matrix:
+   0   1     2    3
+1460   0  2232 1310
+  54 105   181  148
+ 765   4 64353 2100
+ 405   0  7579 5741
+
+🧠 Grad-CAM images are available in:
+C:\Users\Ayush\Alzheimer_Project\outputs\gradcam_visuals
+
+This summary was auto-generated as part of the Alzheimer’s detection thesis pipeline.

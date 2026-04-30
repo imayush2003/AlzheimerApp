@@ -1,0 +1,22 @@
+Phase 2 — Methods & Results Draft
+Generated: 2026-02-07 13:52:46
+
+1. Methods (auto-populated)
+ - Model(s) inspected: 
+    • Loaded model: C:\Users\Ayush\Alzheimer_Project\models\mobilenetv2_best.h5
+ - Input preprocessing used for predictions: images resized to (224, 224), scaled to [0,1].
+ - Grad-CAM visualizations were generated previously and collected from the project's outputs/gradcam_visuals folder.
+
+2. Results (auto-populated summary)
+ - Macro-average: Precision=0.748, Recall=0.471, F1=0.535
+ - Approximate (confusion-matrix) accuracy = 82.90% (71659/86437)
+ - Grad-CAM image counts per class:
+    • Mild Dementia: 5 images
+    • Moderate Dementia: 5 images
+    • Non Demented: 5 images
+    • Very mild Dementia: 5 images
+    • charts: 2 images
+
+3. Suggested text snippets for Results/Discussion (fill references & expand)
+ - The model achieved an approximate accuracy of X% on the test split. Grad-CAM maps (Fig. X) show model attention focusing on ... (add domain interpretation).
+ - Limitations: small sample size per class, need independent external validation.

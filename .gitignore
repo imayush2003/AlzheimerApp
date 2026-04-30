@@ -6,26 +6,12 @@ Alzheimer_Dataset/
 # ============================
 # Trained Model Files
 # ============================
-models/*.h5
-models/*.pkl
-models/*.pth
-models/*.pt
-models/*.ckpt
-models/*.pbtxt
-models/*.pb
+models/
 
 # ============================
 # Output Files & Logs
 # ============================
-outputs/*.csv
-outputs/*.png
-outputs/*.jpg
-outputs/*.pdf
-outputs/*.txt
-outputs/figures/
-outputs/gradcam_visuals/
-outputs/tflite/
-outputs/training_logs/
+outputs/
 
 # ============================
 # Jupyter Notebook Checkpoints
@@ -59,14 +45,6 @@ ENV/
 *.swo
 *~
 .DS_Store
-
-# ============================
-# Reports (Generated)
-# ============================
-reports/Phase2_Methods_Results_Draft.txt
-reports/phase2_results_summary.txt
-reports/Phase2_Thesis_Report_FINAL.pdf
-reports/training_graphs/
 
 # ============================
 # Streamlit App Cache
