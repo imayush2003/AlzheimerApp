@@ -1,0 +1,74 @@
+# ============================
+# Dataset Folders
+# ============================
+Alzheimer_Dataset/
+
+# ============================
+# Trained Model Files
+# ============================
+models/*.h5
+models/*.pkl
+models/*.pth
+models/*.pt
+models/*.ckpt
+models/*.pbtxt
+models/*.pb
+
+# ============================
+# Output Files & Logs
+# ============================
+outputs/*.csv
+outputs/*.png
+outputs/*.jpg
+outputs/*.pdf
+outputs/*.txt
+outputs/figures/
+outputs/gradcam_visuals/
+outputs/tflite/
+outputs/training_logs/
+
+# ============================
+# Jupyter Notebook Checkpoints
+# ============================
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# ============================
+# Python Cache & Bytecode
+# ============================
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# ============================
+# Virtual Environments
+# ============================
+venv/
+env/
+ENV/
+.venv
+
+# ============================
+# IDE & Editor Files
+# ============================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ============================
+# Reports (Generated)
+# ============================
+reports/Phase2_Methods_Results_Draft.txt
+reports/phase2_results_summary.txt
+reports/Phase2_Thesis_Report_FINAL.pdf
+reports/training_graphs/
+
+# ============================
+# Streamlit App Cache
+# ============================
+.streamlit/
