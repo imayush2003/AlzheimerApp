@@ -14,6 +14,11 @@ models/
 outputs/
 
 # ============================
+# Reports (Generated)
+# ============================
+reports/
+
+# ============================
 # Jupyter Notebook Checkpoints
 # ============================
 .ipynb_checkpoints/
