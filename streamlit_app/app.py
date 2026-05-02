@@ -33,7 +33,7 @@ h1, h2, h3 {color: #e5e7eb;}
 # LOAD MODELS
 # =========================================
 
-MODEL_PATH = "../models/mobilenetv2_finetuned.h5"
+MODEL_PATH = "models/mobilenetv2_finetuned.h5"
 TFLITE_PATH = "../models/mobilenetv2.tflite"
 
 @st.cache_resource
