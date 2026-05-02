@@ -29,6 +29,15 @@ h1, h2, h3 {color: #e5e7eb;}
 </style>
 """, unsafe_allow_html=True)
 
+import os
+import streamlit as st
+
+st.write("Current dir:", os.getcwd())
+st.write("Models folder exists:", os.path.exists("../models"))
+st.write("Model file exists:", os.path.exists("../models/mobilenetv2_finetuned.h5"))
+
+
+
 # =========================================
 # DEBUG (IMPORTANT FOR CLOUD)
 # =========================================
@@ -45,6 +54,13 @@ TFLITE_PATH = "models/mobilenetv2.tflite"
 # =========================================
 # LOAD MODELS
 # =========================================
+<<<<<<< HEAD
+=======
+
+MODEL_PATH = "../models/mobilenetv2_finetuned.h5"
+TFLITE_PATH = "../models/mobilenetv2.tflite"
+
+>>>>>>> cdf353b8a0ae7f4c57db48e16c17a2ebdb5a86aa
 @st.cache_resource
 def load_model():
     model = tf.keras.models.load_model(MODEL_PATH, compile=False)
