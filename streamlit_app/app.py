@@ -19,7 +19,9 @@ st.set_page_config(
     layout="wide"
 )
 
-# ---------- CUSTOM CSS ----------
+# =========================================
+# UI STYLE
+# =========================================
 st.markdown("""
 <style>
 .main {background: linear-gradient(135deg, #0f172a, #020617);}
@@ -30,35 +32,56 @@ h1, h2, h3 {color: #e5e7eb;}
 """, unsafe_allow_html=True)
 
 # =========================================
-# DEBUG (IMPORTANT FOR CLOUD)
+# DEBUG (REMOVE LATER IF NEEDED)
 # =========================================
 st.write("Current dir:", os.getcwd())
 st.write("Models folder exists:", os.path.exists("models"))
 st.write("Model file exists:", os.path.exists("models/mobilenetv2_finetuned.h5"))
 
 # =========================================
-# PATHS (FIXED)
+# PATHS
 # =========================================
 MODEL_PATH = "models/mobilenetv2_finetuned.h5"
 TFLITE_PATH = "models/mobilenetv2.tflite"
 
 # =========================================
-# LOAD MODELS
+# LOAD MODELS (FIXED)
 # =========================================
 @st.cache_resource
 def load_model():
-    model = tf.keras.models.load_model(MODEL_PATH, compile=False)
-    model.trainable = False
-    return model
+    try:
+        model = tf.keras.models.load_model(
+            MODEL_PATH,
+            compile=False,
+            safe_mode=False   # 🔥 critical fix
+        )
+        model.trainable = False
+        return model
+    except Exception as e:
+        st.error(f"❌ Model loading failed: {e}")
+        return None
+
 
 @st.cache_resource
 def load_tflite():
-    interpreter = tf.lite.Interpreter(model_path=TFLITE_PATH)
-    interpreter.allocate_tensors()
-    return interpreter
+    try:
+        interpreter = tf.lite.Interpreter(model_path=TFLITE_PATH)
+        interpreter.allocate_tensors()
+        return interpreter
+    except Exception as e:
+        st.error(f"❌ TFLite loading failed: {e}")
+        return None
+
 
 model = load_model()
+tflite_model = load_tflite()
 
+if model is None and tflite_model is None:
+    st.stop()
+
+# =========================================
+# CLASS LABELS
+# =========================================
 CLASS_NAMES = [
     "Mild Dementia",
     "Moderate Dementia",
@@ -151,18 +174,26 @@ if uploaded_file:
     image = Image.open(uploaded_file)
     img_array = preprocess_image(image)
 
-    # -------- Inference --------
     start = time.time()
 
-    if mode == "Keras (Accurate)":
+    # =========================================
+    # PREDICTION
+    # =========================================
+    if mode == "Keras (Accurate)" and model is not None:
         prediction = model.predict(img_array)[0]
+
+    elif tflite_model is not None:
+        input_details = tflite_model.get_input_details()
+        output_details = tflite_model.get_output_details()
+
+        tflite_model.set_tensor(input_details[0]['index'], img_array)
+        tflite_model.invoke()
+
+        prediction = tflite_model.get_tensor(output_details[0]['index'])[0]
+
     else:
-        interpreter = load_tflite()
-        input_details = interpreter.get_input_details()
-        output_details = interpreter.get_output_details()
-        interpreter.set_tensor(input_details[0]['index'], img_array)
-        interpreter.invoke()
-        prediction = interpreter.get_tensor(output_details[0]['index'])[0]
+        st.error("No model available")
+        st.stop()
 
     inference_time = time.time() - start
 
@@ -190,9 +221,8 @@ if uploaded_file:
         "📄 Details"
     ])
 
-    # ---------- TAB 1 ----------
+    # ---------- ANALYSIS ----------
     with tab1:
-
         col1, col2 = st.columns(2)
 
         with col1:
@@ -204,46 +234,21 @@ if uploaded_file:
             fig.update_layout(title="Class Probabilities", template="plotly_dark")
             st.plotly_chart(fig, width="stretch")
 
-            gauge = go.Figure(go.Indicator(
-                mode="gauge+number",
-                value=float(confidence),
-                title={'text': "Confidence"},
-                gauge={'axis': {'range': [0,1]}}
-            ))
-
-            st.plotly_chart(gauge, width="stretch")
-
-    # ---------- TAB 2 ----------
+    # ---------- GRAD-CAM ----------
     with tab2:
-
-        if mode == "Keras (Accurate)" and show_gradcam:
+        if mode == "Keras (Accurate)" and show_gradcam and model is not None:
             heatmap = make_gradcam_heatmap(img_array, model)
             overlay = overlay_heatmap(image, heatmap)
             st.image(overlay, width="stretch")
         else:
-            st.warning("Grad-CAM not available in TFLite mode")
+            st.warning("Grad-CAM only available in Keras mode")
 
-    # ---------- TAB 3 ----------
+    # ---------- DETAILS ----------
     with tab3:
-
-        st.subheader("Prediction Breakdown")
-
         df = pd.DataFrame({
             "Class": CLASS_NAMES,
             "Probability": prediction
         })
-
         st.dataframe(df, width="stretch")
-
-        st.subheader("Interpretation")
-
-        if class_index == 2:
-            st.success("No dementia detected.")
-        elif class_index == 3:
-            st.warning("Very mild cognitive decline.")
-        elif class_index == 0:
-            st.warning("Mild dementia detected.")
-        else:
-            st.error("Moderate dementia detected.")
 
     st.success("✅ Analysis Complete")
