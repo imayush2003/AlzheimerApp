@@ -19,7 +19,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# ---------- CUSTOM CSS (MODERN UI) ----------
+# ---------- CUSTOM CSS ----------
 st.markdown("""
 <style>
 .main {background: linear-gradient(135deg, #0f172a, #020617);}
@@ -30,12 +30,21 @@ h1, h2, h3 {color: #e5e7eb;}
 """, unsafe_allow_html=True)
 
 # =========================================
+# DEBUG (IMPORTANT FOR CLOUD)
+# =========================================
+st.write("Current dir:", os.getcwd())
+st.write("Models folder exists:", os.path.exists("models"))
+st.write("Model file exists:", os.path.exists("models/mobilenetv2_finetuned.h5"))
+
+# =========================================
+# PATHS (FIXED)
+# =========================================
+MODEL_PATH = "models/mobilenetv2_finetuned.h5"
+TFLITE_PATH = "models/mobilenetv2.tflite"
+
+# =========================================
 # LOAD MODELS
 # =========================================
-
-MODEL_PATH = "/models/mobilenetv2_finetuned.h5"
-TFLITE_PATH = "../models/mobilenetv2.tflite"
-
 @st.cache_resource
 def load_model():
     model = tf.keras.models.load_model(MODEL_PATH, compile=False)
@@ -125,8 +134,8 @@ with st.sidebar:
 
     st.subheader("📊 Model Info")
     st.write("Architecture: MobileNetV2")
-    st.write("Params: 2.26M")
-    st.write("Model Size: 8.63 MB")
+    st.write("Parameters: 2.26M")
+    st.write("Model Size: 18.2 MB")
     st.write("Cross-Val Accuracy: 91.54%")
 
 # =========================================
@@ -161,7 +170,7 @@ if uploaded_file:
     confidence = prediction[class_index]
 
     # =========================================
-    # DASHBOARD METRICS
+    # METRICS
     # =========================================
     c1, c2, c3, c4 = st.columns(4)
 
@@ -191,20 +200,10 @@ if uploaded_file:
 
         with col2:
             fig = go.Figure()
-
-            fig.add_bar(
-                x=CLASS_NAMES,
-                y=prediction
-            )
-
-            fig.update_layout(
-                title="Class Probabilities",
-                template="plotly_dark"
-            )
-
+            fig.add_bar(x=CLASS_NAMES, y=prediction)
+            fig.update_layout(title="Class Probabilities", template="plotly_dark")
             st.plotly_chart(fig, width="stretch")
 
-            # Gauge
             gauge = go.Figure(go.Indicator(
                 mode="gauge+number",
                 value=float(confidence),
@@ -218,12 +217,9 @@ if uploaded_file:
     with tab2:
 
         if mode == "Keras (Accurate)" and show_gradcam:
-
             heatmap = make_gradcam_heatmap(img_array, model)
             overlay = overlay_heatmap(image, heatmap)
-
             st.image(overlay, width="stretch")
-
         else:
             st.warning("Grad-CAM not available in TFLite mode")
 
