@@ -29,6 +29,15 @@ h1, h2, h3 {color: #e5e7eb;}
 </style>
 """, unsafe_allow_html=True)
 
+import os
+import streamlit as st
+
+st.write("Current dir:", os.getcwd())
+st.write("Models folder exists:", os.path.exists("../models"))
+st.write("Model file exists:", os.path.exists("../models/mobilenetv2_finetuned.h5"))
+
+
+
 # =========================================
 # LOAD MODELS
 # =========================================
