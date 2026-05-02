@@ -42,7 +42,7 @@ st.write("Model file exists:", os.path.exists("../models/mobilenetv2_finetuned.h
 # LOAD MODELS
 # =========================================
 
-MODEL_PATH = "/models/mobilenetv2_finetuned.h5"
+MODEL_PATH = "../models/mobilenetv2_finetuned.h5"
 TFLITE_PATH = "../models/mobilenetv2.tflite"
 
 @st.cache_resource
