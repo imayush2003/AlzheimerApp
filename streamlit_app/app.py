@@ -41,7 +41,7 @@ st.write("Model file exists:", os.path.exists("models/mobilenetv2_finetuned.h5")
 # =========================================
 # PATHS
 # =========================================
-MODEL_PATH = "models/mobilenetv2_finetuned.h5"
+MODEL_PATH = "models/fixed_model.h5"
 TFLITE_PATH = "models/mobilenetv2.tflite"
 
 # =========================================
