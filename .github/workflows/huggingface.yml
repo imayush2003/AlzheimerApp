@@ -18,6 +18,6 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         # NOTE: Make sure your Hugging Face username and Space name match the URL below!
-        # If your HF username is not 'imayush2003' or your space is not 'AlzheimerApp', 
+        # If your HF username is not 'imAyush1164' or your space is not 'AlzheimerApp', 
         # please update this URL.
-        run: git push --force https://imayush2003:$HF_TOKEN@huggingface.co/spaces/imayush2003/AlzheimerApp main
+        run: git push --force https://imAyush1164:$HF_TOKEN@huggingface.co/spaces/imAyush1164/AlzheimerApp main
