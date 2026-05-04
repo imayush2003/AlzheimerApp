@@ -53,3 +53,11 @@ ENV/
 # Streamlit App Cache
 # ============================
 .streamlit/
+
+# ============================
+# Large Models (Unused by App)
+# ============================
+models/baseline*.h5
+models/*_best.h5
+models/*_head.h5
+models/fixed_model.h5
