@@ -24,10 +24,10 @@ jobs:
           rm -rf .git
           git config --global user.email "bot@example.com"
           git config --global user.name "Deploy Bot"
-          git init
+          git init -b main
           git lfs install
           git lfs track "*.h5"
           git add .gitattributes
           git add .
           git commit -m "Deploy to Hugging Face Spaces"
-          git push --force https://imAyush1164:$HF_TOKEN@huggingface.co/spaces/imAyush1164/AlzheimerApp master:main
+          git push --force https://imAyush1164:$HF_TOKEN@huggingface.co/spaces/imAyush1164/AlzheimerApp main
