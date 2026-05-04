@@ -27,6 +27,7 @@ jobs:
           git init -b main
           git lfs install
           git lfs track "*.h5"
+          git lfs track "*.tflite"
           git add .gitattributes
           git add .
           git commit -m "Deploy to Hugging Face Spaces"
