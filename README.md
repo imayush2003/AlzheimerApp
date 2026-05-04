@@ -1,3 +1,13 @@
+---
+title: Alzheimer AI System
+emoji: 🧠
+colorFrom: blue
+colorTo: indigo
+sdk: streamlit
+sdk_version: 1.57.0
+app_file: streamlit_app/app.py
+pinned: false
+---
 # 🧠 Alzheimer Detection AI System
 
 A Lightweight Deep Learning application with Explainable AI (Grad-CAM) to detect Alzheimer's Disease from MRI brain scans.

@@ -1,0 +1,23 @@
+name: Sync to Hugging Face hub
+
+on:
+  push:
+    branches: [main]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  sync-to-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Push to hub
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        # NOTE: Make sure your Hugging Face username and Space name match the URL below!
+        # If your HF username is not 'imayush2003' or your space is not 'AlzheimerApp', 
+        # please update this URL.
+        run: git push --force https://imayush2003:$HF_TOKEN@huggingface.co/spaces/imayush2003/AlzheimerApp main
