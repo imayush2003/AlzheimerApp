@@ -314,7 +314,10 @@ def load_model():
                         clean_config(item)
                         
             clean_config(model_config)
-            model = tf.keras.models.model_from_json(json.dumps(model_config))
+            model = tf.keras.models.model_from_json(
+                json.dumps(model_config),
+                custom_objects={'Functional': tf.keras.models.Model}
+            )
             
         model.load_weights(MODEL_PATH)
         
