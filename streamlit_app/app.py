@@ -304,7 +304,11 @@ def load_model():
                 if isinstance(config, dict):
                     # Do not rename 'Functional' here, handle it in custom_objects instead.
                     config.pop('quantization_config', None)
-                    config.pop('batch_shape', None)
+                    if 'batch_shape' in config:
+                        bs = config.pop('batch_shape')
+                        if bs is not None and len(bs) > 0:
+                            config['shape'] = bs[1:]
+                            config['batch_size'] = bs[0]
                     config.pop('optional', None)
                     for k, v in list(config.items()):
                         clean_config(v)
