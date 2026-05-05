@@ -302,8 +302,7 @@ def load_model():
             
             def clean_config(config):
                 if isinstance(config, dict):
-                    if config.get('class_name') == 'Functional':
-                        config['class_name'] = 'Model'
+                    # Do not rename 'Functional' here, handle it in custom_objects instead.
                     config.pop('quantization_config', None)
                     config.pop('batch_shape', None)
                     config.pop('optional', None)
@@ -316,7 +315,10 @@ def load_model():
             clean_config(model_config)
             model = tf.keras.models.model_from_json(
                 json.dumps(model_config),
-                custom_objects={'Functional': tf.keras.models.Model}
+                custom_objects={
+                    'Functional': tf.keras.models.Model,
+                    'Model': tf.keras.models.Model
+                }
             )
             
         model.load_weights(MODEL_PATH)
