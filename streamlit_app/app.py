@@ -279,11 +279,43 @@ st.markdown("<hr style='margin: 10px 0 20px 0;'>", unsafe_allow_html=True)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "../models/mobilenetv2_finetuned.h5")
 
+import h5py
+import json
+
 @st.cache_resource
 def load_model():
     if not os.path.exists(MODEL_PATH):
         return None
-    model = tf.keras.models.load_model(MODEL_PATH, compile=False)
+        
+    try:
+        # Standard load
+        model = tf.keras.models.load_model(MODEL_PATH, compile=False)
+    except Exception as e:
+        st.warning(f"Standard model load failed due to Keras version mismatch, using robust loader...")
+        # Robust loader: Sanitizes config JSON to bypass strict Keras 3 kwargs errors
+        with h5py.File(MODEL_PATH, 'r') as f:
+            model_config_str = f.attrs.get('model_config')
+            if isinstance(model_config_str, bytes):
+                model_config_str = model_config_str.decode('utf-8')
+            
+            model_config = json.loads(model_config_str)
+            
+            def clean_config(config):
+                if isinstance(config, dict):
+                    config.pop('quantization_config', None)
+                    config.pop('batch_shape', None)
+                    config.pop('optional', None)
+                    for k, v in config.items():
+                        clean_config(v)
+                elif isinstance(config, list):
+                    for item in config:
+                        clean_config(item)
+                        
+            clean_config(model_config)
+            model = tf.keras.models.model_from_json(json.dumps(model_config))
+            
+        model.load_weights(MODEL_PATH)
+        
     model.trainable = False
     return model
 
