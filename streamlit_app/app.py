@@ -302,10 +302,12 @@ def load_model():
             
             def clean_config(config):
                 if isinstance(config, dict):
+                    if config.get('class_name') == 'Functional':
+                        config['class_name'] = 'Model'
                     config.pop('quantization_config', None)
                     config.pop('batch_shape', None)
                     config.pop('optional', None)
-                    for k, v in config.items():
+                    for k, v in list(config.items()):
                         clean_config(v)
                 elif isinstance(config, list):
                     for item in config:
